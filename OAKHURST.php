@@ -1,4 +1,6 @@
 <?php
+include 'errorHandler.php';
+
 // Soap Request Class
 
 class OAKHURST_SOAP {
@@ -8,6 +10,7 @@ class OAKHURST_SOAP {
 	var $SOAPBody = '<soap:Body></soap:Body></soap:Envelope>';
 	var $SOAPxml;
 	var $SOAPResponeArray;
+  var $ErrorArray;
 	var $SOAPstatus;
 	function OAKHURST_SOAP(bool $isTest, $username, $password) {
 		$this->isTest = $isTest;
@@ -43,18 +46,24 @@ class OAKHURST_SOAP {
 		$this->SOAPstatus = $this->SOAPResponseArray['Status']; 
 	}
 	function validatePolicy(array $PolicyDetails) {
-		$this->SOAPBody = '<soap:Body><validatePolicy xmlns="http://www.softsure.co.za/"><PolicyDetails>
+		$SOAPBody = '<soap:Body><validatePolicy xmlns="http://www.softsure.co.za/"><PolicyDetails>
         <InceptionDate>'.$PolicyDetails['InceptionDate'].'</InceptionDate><SignupDate>'.$PolicyDetails['SignupDate'].'</SignupDate><AgentDetail><BrokerCode>'.$PolicyDetails['AgentDetail']['BrokerCode'].'</BrokerCode><SubPartnerCode>'.$PolicyDetails['AgentDetail']['SubPartnerCode'].'</SubPartnerCode><SubPartnerName>'.$PolicyDetails['AgentDetail']['SubPartnerName'].'</SubPartnerName><AgentCode>'.$PolicyDetails['AgentDetail']['AgentCode'].'</AgentCode><AgentName>'.$PolicyDetails['AgentDetail']['AgentName'].'</AgentName><AgentTelephone>'.$PolicyDetails['AgentDetail']['AgentTelephone'].'</AgentTelephone><AgentEmail>'.$PolicyDetails['AgentDetail']['AgentEmail'].'</AgentEmail><VIPCode>'.$PolicyDetails['AgentDetail']['VIPCode'].'</VIPCode></AgentDetail><ProductDetail><Name>'.$PolicyDetails['ProductDetail']['Name'].'</Name><Scheme>'.$PolicyDetails['ProductDetail']['Scheme'].'</Scheme></ProductDetail><InsuredDetail><Surname>'.$PolicyDetails['InsuredDetail']['Surname'].'</Surname><FirstName>'.$PolicyDetails['InsuredDetail']['FirstName'].'</FirstName><Initials>'.$PolicyDetails['InsuredDetail']['Initials'].'</Initials><IDType>'.$PolicyDetails['InsuredDetail']['IDType'].'</IDType><IDNumber>'.$PolicyDetails['InsuredDetail']['IDNumber'].'</IDNumber><GenderCde>'.$PolicyDetails['InsuredDetail']['GenderCde'].'</GenderCde><MaritalCde>'.$PolicyDetails['InsuredDetail']['MaritalCde'].'</MaritalCde><DateOfBirth>'.$PolicyDetails['InsuredDetail']['DateOfBirth'].'</DateOfBirth><AddressLine1>'.$PolicyDetails['InsuredDetail']['AddressLine1'].'</AddressLine1><Suburb>'.$PolicyDetails['InsuredDetail']['Suburb'].'</Suburb><Town>'.$PolicyDetails['InsuredDetail']['Town'].'</Town><Postcode>'.$PolicyDetails['InsuredDetail']['Postcode'].'</Postcode><ContactNo>'.$PolicyDetails['InsuredDetail']['ContactNo'].'</ContactNo><CustomerType>'.$PolicyDetails['InsuredDetail']['CustomerType'].'</CustomerType><UniqueReference>'.$PolicyDetails['InsuredDetail']['UniqueReference'].'</UniqueReference><Language>'.$PolicyDetails['InsuredDetail']['Language'].'</Language><Title>'.$PolicyDetails['InsuredDetail']['Title'].'</Title><MobileNo>'.$PolicyDetails['InsuredDetail']['MobileNo'].'</MobileNo><EmailAddress>'.$PolicyDetails['InsuredDetail']['EmailAddress'].'</EmailAddress><HighestEducation>'.$PolicyDetails['InsuredDetail']['HighestEducation'].'</HighestEducation><RecordAction>'.$PolicyDetails['InsuredDetail']['RecordAction'].'</RecordAction></InsuredDetail><BankingDetail><BranchName>'.$PolicyDetails['BankingDetail']['BranchName'].'</BranchName><BankId>'.$PolicyDetails['BankingDetail']['BranchID'].'</BankId><DebitDay>'.$PolicyDetails['BankingDetail']['DebitDay'].'</DebitDay></BankingDetail><Pets>';
         foreach ($PolicyDetails['Pets'] as $pet) {
-        	$this->SOAPBody .= '<PetDetail><InceptionDate>'.$pet['InceptionDate'].'</InceptionDate><PlanCode>'.$pet['PlanCode'].'</PlanCode><TypeCode>'.$pet['TypeCode'].'</TypeCode><BreedCode>'.$pet['BreedCode'].'</BreedCode><Gender>'.$pet['Gender'].'</Gender><Name>'.$pet['Name'].'</Name><PureBred>'.$pet['PureBred'].'</PureBred><Microchip>'.$pet['Microchip'].'</Microchip><PreCondition>'.$pet['PreCondition'].'</PreCondition><DOB>'.$pet['DOB'].'</DOB><Neutered>'.$pet['Neutered'].'</Neutered><Vaccinations>'.$pet['Vaccinations'].'</Vaccinations><OtherDesc>'.$pet['OtherDesc'].'</OtherDesc><ExcessPercentage>'.$pet['ExcessPercentage'].'</ExcessPercentage><ExcessOption>'.$pet['ExcessOption'].'</ExcessOption><PremiumDetail><RiskPremium>'.$pet['PremiumDetail']['RiskPremium'].'</RiskPremium><ProrataAmount>'.$pet['PremiumDetail']['ProrataAmount'].'</ProrataAmount><GST>'.$pet['PremiumDetail']['GST'].'</GST><ProrataGST>'.$pet['PremiumDetail']['ProrataGST'].'</ProrataGST></PremiumDetail><BenefitID>'.$pet['BenefitID'].'</BenefitID><Extensions xsi:nil="true" /><NYPInd>'.$pet['NYPInd'].'</NYPInd><RecordAction>'.$pet['RecordAction'].'</RecordAction><Status>'.$pet['Status'].'</Status></PetDetail>';
+        	$SOAPBody .= '<PetDetail><InceptionDate>'.$pet['InceptionDate'].'</InceptionDate><PlanCode>'.$pet['PlanCode'].'</PlanCode><TypeCode>'.$pet['TypeCode'].'</TypeCode><BreedCode>'.$pet['BreedCode'].'</BreedCode><Gender>'.$pet['Gender'].'</Gender><Name>'.$pet['Name'].'</Name><PureBred>'.$pet['PureBred'].'</PureBred><Microchip>'.$pet['Microchip'].'</Microchip><PreCondition>'.$pet['PreCondition'].'</PreCondition><DOB>'.$pet['DOB'].'</DOB><Neutered>'.$pet['Neutered'].'</Neutered><Vaccinations>'.$pet['Vaccinations'].'</Vaccinations><OtherDesc>'.$pet['OtherDesc'].'</OtherDesc><ExcessPercentage>'.$pet['ExcessPercentage'].'</ExcessPercentage><ExcessOption>'.$pet['ExcessOption'].'</ExcessOption><PremiumDetail><RiskPremium>'.$pet['PremiumDetail']['RiskPremium'].'</RiskPremium><ProrataAmount>'.$pet['PremiumDetail']['ProrataAmount'].'</ProrataAmount><GST>'.$pet['PremiumDetail']['GST'].'</GST><ProrataGST>'.$pet['PremiumDetail']['ProrataGST'].'</ProrataGST></PremiumDetail><BenefitID>'.$pet['BenefitID'].'</BenefitID><Extensions xsi:nil="true" /><NYPInd>'.$pet['NYPInd'].'</NYPInd><RecordAction>'.$pet['RecordAction'].'</RecordAction><Status>'.$pet['Status'].'</Status></PetDetail>';
         }
-    $this->SOAPBody .= '</Pets><CampaignId>'.$PolicyDetails['CampaignId'].'</CampaignId><SaleType>'.$PolicyDetails['SaleType'].'</SaleType><PaymentFrequency>'.$PolicyDetails['PaymentFrequency'].'</PaymentFrequency><PaymentTerm>'.$PolicyDetails['PaymentTerm'].'</PaymentTerm><PaymentMethod>'.$PolicyDetails['PaymentMethod'].'</PaymentMethod></PolicyDetails></validatePolicy></soap:Body></soap:Envelope>';
-    $this->SOAPxml = $this->SOAPHeader.$this->SOAPBody;
-    $this->SOAPResponseArray = $this->_send()['validatePolicyResponse']['validatePolicyResult'];
-	$this->SOAPstatus = $this->SOAPResponseArray['Status'];
+    $SOAPBody .= '</Pets><CampaignId>'.$PolicyDetails['CampaignId'].'</CampaignId><SaleType>'.$PolicyDetails['SaleType'].'</SaleType><PaymentFrequency>'.$PolicyDetails['PaymentFrequency'].'</PaymentFrequency><PaymentTerm>'.$PolicyDetails['PaymentTerm'].'</PaymentTerm><PaymentMethod>'.$PolicyDetails['PaymentMethod'].'</PaymentMethod></PolicyDetails></validatePolicy></soap:Body></soap:Envelope>';
+  if (sizeof(errorHandler::policy($PolicyDetails)) <= 0) {
+      $this->SOAPBody = $SOAPBody;
+      $this->SOAPxml = $this->SOAPHeader.$this->SOAPBody;
+      $this->SOAPResponseArray = $this->_send()['validatePolicyResponse']['validatePolicyResult'];
+      $this->SOAPstatus = $this->SOAPResponseArray['Status'];
+    } else {
+      $this->SOAPstatus = 'Failure - Please check ErrorArray';
+      $this->ErrorArray = errorHandler::policy($PolicyDetails);
+    }
 	}
 	function inceptPolicy(array $PolicyDetails, string $ExtReference) {
-		$this->SOAPBody = '<soap:Body>
+		$SOAPBody = '<soap:Body>
     <inceptPolicy xmlns="http://www.softsure.co.za/">
       <PolicyDetails>
         <InceptionDate>'.$PolicyDetails['InceptionDate'].'</InceptionDate>
@@ -103,7 +112,7 @@ class OAKHURST_SOAP {
         </BankingDetail>
         <Pets>';
         foreach ($PolicyDetails['Pets'] as $pet) {
-        	$this->SOAPBody .= '<PetDetail>
+        	$SOAPBody .= '<PetDetail>
             <InceptionDate>'.$pet['InceptionDate'].'</InceptionDate>
             <PlanCode>'.$pet['PlanCode'].'</PlanCode>
             <TypeCode>'.$pet['TypeCode'].'</TypeCode>
@@ -132,7 +141,7 @@ class OAKHURST_SOAP {
             <Status>'.$pet['Status'].'</Status>
           </PetDetail>';
         }
-    $this->SOAPBody .= '</Pets>
+    $SOAPBody .= '</Pets>
         <CampaignId>'.$PolicyDetails['CampaignId'].'</CampaignId>
         <SaleType>'.$PolicyDetails['SaleType'].'</SaleType>
         <PaymentFrequency>'.$PolicyDetails['PaymentFrequency'].'</PaymentFrequency>
@@ -143,15 +152,22 @@ class OAKHURST_SOAP {
     </inceptPolicy>
       </soap:Body>
 </soap:Envelope>';
-    $this->SOAPxml = $this->SOAPHeader.$this->SOAPBody;
-    $this->SOAPResponseArray = $this->_send()['inceptPolicyResponse']['inceptPolicyResult'];
-	$this->SOAPstatus = $this->SOAPResponseArray['Status'];
+    if (sizeof(errorHandler::policy($PolicyDetails)) <= 0) {
+      $this->SOAPBody = $SOAPBody;
+      $this->SOAPxml = $this->SOAPHeader.$this->SOAPBody;
+      $this->SOAPResponseArray = $this->_send()['inceptPolicyResponse']['inceptPolicyResult'];
+  	  $this->SOAPstatus = $this->SOAPResponseArray['Status'];
+    } else {
+      $this->SOAPstatus = 'Failure - Please check ErrorArray';
+      $this->ErrorArray = errorHandler::policy($PolicyDetails);
+    }
+
 	}
 
 	// multirater section 
 	function GetProductQuote(array $quote, string $SchemeCode) {
 		$this->url = $this->isTest ? 'http://apps.softsure.co.za/Multirates_UAT/Service.asmx?WSDL' : 'http://apps.softsure.co.za/Multirates/Service.asmx?WSDL';
-		$this->SOAPBody = '
+		$SOAPBody = '
 <soap:Body>
 		<GetProductQuote xmlns="http://www.softsure.co.za/">
   <QuoteData>
@@ -195,8 +211,14 @@ class OAKHURST_SOAP {
 </GetProductQuote>
       </soap:Body>
 </soap:Envelope>';
-		$this->SOAPxml = $this->SOAPHeader.$this->SOAPBody;
-		// $this->SOAPResponseArray = $this->_send()['listPoliciesResponse']['listPoliciesResult'];; 
-		// $this->SOAPstatus = $this->SOAPResponseArray['Status']; 
+    if (sizeof(errorHandler::quote($quote)) <= 0) {
+      $this->SOAPBody = $SOAPBody;
+  		$this->SOAPxml = $this->SOAPHeader.$this->SOAPBody;
+  		$this->SOAPResponseArray = $this->_send(); 
+  		$this->SOAPstatus = $this->SOAPResponseArray['Status']; 
+    } else {
+      $this->SOAPstatus = 'Failure - Please check ErrorArray';
+      $this->ErrorArray = errorHandler::quote($quote);
+    }
 	}
 }
