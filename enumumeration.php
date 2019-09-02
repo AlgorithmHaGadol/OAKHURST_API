@@ -137,6 +137,13 @@ abstract class OccupationCde extends BasicEnum {
 		PrivateSector = 'PrivateSector';
 }
 
+abstract class CustTypeCode extends BasicEnum {
+	const Private_Individual = 'Private_Individual',
+		Company = 'Company',
+		Joint_Account = 'Joint_Account',
+		Close_Corporation = 'Close_Corporation';
+}
+
 abstract class LanguageCode extends BasicEnum {
 	const English = 'English',
 		Afrikaans = 'Afrikaans',
@@ -210,5 +217,3 @@ abstract class EducationCode extends BasicEnum {
 		Four_YrDegree = 'Four_YrDegree',
 		Professional = 'Professional';
 }
-
- ?>
